@@ -13,6 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
       - name: Deploy to Pinata
         run: |
           curl -X POST -H "Content-Type: application/json" -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" -H "pinata_secret_api_key: ${{ secrets.PINATA_SECRET_API_KEY }}" --data "{\"cid\": \"${{ steps.your_previous_step.outputs.cid }}\", \"name\": \"MonSiteWeb\"}" https://gateway.pinata.cloud/ipfs/${{ steps.your_previous_step.outputs.cid }}
