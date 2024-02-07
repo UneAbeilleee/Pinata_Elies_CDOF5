@@ -1,29 +1,28 @@
 name: Deploy to Pinata
 
 on:
-  push:
-    branches:
-      - main
+    push:
+      branches:
+        - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Deploy to Pinata
-        run: |
-          curl -X POST -H "Content-Type: application/json" -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" -H "pinata_secret_api_key: ${{ secrets.PINATA_SECRET_API_KEY }}" --data "{\"cid\": \"${{ steps.your_previous_step.outputs.cid }}\", \"name\": \"MonSiteWeb\"}" https://gateway.pinata.cloud/ipfs/${{ steps.your_previous_step.outputs.cid }}
-        env:
-          PINATA_API_KEY: ${{ secrets.PINATA_API_KEY }}
-          PINATA_SECRET_API_KEY: ${{ secrets.PINATA_SECRET_API_KEY }}
+    deploy:
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+  
+        - name: Deploy to Pinata
+          uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
+          with:
+            pin-name: 'MonSiteWeb'
+            path: './'
+            pinata-api-key: ${{ secrets.PINATA_API_KEY }}
+            pinata-secret-api-key: ${{ secrets.PINATA_SECRET_API_KEY }}
+            verbose: true
+            remove-old: false
+  
+        - name: Get the output hash
+          run: echo "Le CID est ${{ steps.deploy.outputs.hash }}"
+  
