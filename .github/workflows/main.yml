@@ -1,0 +1,18 @@
+name: Deploy to Pinata
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Deploy to Pinata
+      run: |
+        curl -X POST -H "Content-Type: application/json" -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" -H "pinata_secret_api_key: ${{ secrets.PINATA_SECRET_API_KEY }}" --data "{\"hashToPin\": \"$GITHUB_SHA\", \"name\": \"MonSiteWeb\"}" https://api.pinata.cloud/pinning/pinJSONToIPFS
