@@ -10,9 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Deploy to Pinata
-      run: |
-        curl -X POST -H "Content-Type: application/json" -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" -H "pinata_secret_api_key: ${{ secrets.PINATA_SECRET_API_KEY }}" --data "{\"hashToPin\": \"$GITHUB_SHA\", \"name\": \"MonSiteWeb\"}" https://api.pinata.cloud/pinning/pinJSONToIPFS
+      - name: Deploy to Pinata
+        run: |
+          curl -X POST -H "Content-Type: application/json" -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" -H "pinata_secret_api_key: ${{ secrets.PINATA_SECRET_API_KEY }}" --data "{\"cid\": \"${{ steps.your_previous_step.outputs.cid }}\", \"name\": \"MonSiteWeb\"}" https://gateway.pinata.cloud/ipfs/${{ steps.your_previous_step.outputs.cid }}
+        env:
+          PINATA_API_KEY: ${{ secrets.PINATA_API_KEY }}
+          PINATA_SECRET_API_KEY: ${{ secrets.PINATA_SECRET_API_KEY }}
