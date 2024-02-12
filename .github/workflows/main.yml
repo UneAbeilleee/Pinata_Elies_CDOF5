@@ -15,8 +15,9 @@ jobs:
 
       - name: Install IPFS
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ipfs
+          wget https://dist.ipfs.io/go-ipfs/v0.12.1/go-ipfs_v0.12.1_linux-amd64.tar.gz
+          tar xvfz go-ipfs_v0.12.1_linux-amd64.tar.gz
+          sudo mv go-ipfs/ipfs /usr/local/bin/ipfs
 
       - name: Deploy to Pinata
         uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
@@ -30,5 +31,8 @@ jobs:
 
       - name: Get the output hash
         run: |
+          ipfs init
+          ipfs daemon --init
+          sleep 5  # Attendre quelques secondes pour que le démon IPFS démarre complètement
           cid=$(ipfs add -Q -r ./)
           echo "Le CID est $cid"
