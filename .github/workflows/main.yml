@@ -13,8 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up IPFS
-        uses: ipfs/setup-ipfs@v0.2.5
+      - name: Install IPFS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ipfs
 
       - name: Deploy to Pinata
         uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
