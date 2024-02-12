@@ -24,5 +24,7 @@ jobs:
             remove-old: false
   
         - name: Get the output hash
-          run: echo "Le CID est ${{ steps.deploy.outputs.hash }}"
+          run: |
+            cid=$(ipfs add -Q -r ./)
+            echo "Le CID est $cid"
   
